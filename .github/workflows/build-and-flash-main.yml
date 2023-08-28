@@ -1,0 +1,14 @@
+name: Build and flash target binary
+run-name: ${{ github.event.head_commit.message }}
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+  flash:
+    needs: build
+    uses: ./.github/workflows/flash.yml
+    with:
+      target: dev

@@ -1,0 +1,39 @@
+name: Draft release from main
+run-name: Draft release ${{ inputs.version }}
+permissions:
+  contents: write
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'New release version number'
+        required: true
+        type: string
+jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+  create-release:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Create tag
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/${{ inputs.version }}',
+              sha: context.sha
+            })
+      - name: Download target binary
+        uses: actions/download-artifact@v3
+        with:
+          name: f303
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: ${{ inputs.version }}
+          tag_name: ${{ inputs.version }}
+          draft: true
+          files: f303

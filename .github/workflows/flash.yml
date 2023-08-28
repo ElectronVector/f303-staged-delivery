@@ -1,0 +1,19 @@
+name: Flash target
+on:
+  workflow_call:
+    inputs:
+      target:
+        required: true
+        type: string
+jobs:
+  flash-target:
+    runs-on: [ self-hosted, "${{ inputs.target }}" ]
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+      - name: Download target binary
+        uses: actions/download-artifact@v3
+        with:
+          name: f303
+      - name: Flash target
+        run: gdb-multiarch -x gdb-st-link-flash-and-exit.py f303

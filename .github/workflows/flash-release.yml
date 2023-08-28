@@ -1,0 +1,36 @@
+name: Flash published release
+run-name: Deploy ${{ github.ref_name }}
+on:
+  release:
+    types: [published]
+jobs:
+  deploy-release:
+    runs-on: [ self-hosted, prod ]
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+      - name: Download target binary
+        uses: dsaltares/fetch-gh-release-asset@master
+        with:
+          repo: 'mchernosky/f303'
+          version: 'tags/${{ github.ref_name }}'
+          file: 'f303'
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: pwd
+        run: pwd && ls
+      - name: Flash target
+        run: gdb-multiarch -x gdb-st-link-flash-and-exit.py f303
+#  flash-target:
+#    runs-on: [self-hosted, dev]
+#    needs: build-target-binary
+#    steps:
+#      - name: Check out code
+#        uses: actions/checkout@v3
+#      - name: Download target binary
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: f303
+#      - name: Flash target
+#        run: gdb-multiarch -x gdb-st-link-flash-and-exit.py f303
+
+# https://github.com/mchernosky/f303/releases/download/0.8.0/f303
