@@ -1,14 +1,12 @@
 name: Flash published release
-run-name: Flash ${{ github.ref_name }}
+run-name: Flash release ${{ github.ref_name }}
 on:
   release:
     types: [published]
 jobs:
-  checkout:
+  download:
     runs-on: [ self-hosted, release ]
     steps:
-      - name: Check out code
-        uses: actions/checkout@v3
       - name: Download target binary
         uses: dsaltares/fetch-gh-release-asset@master
         with:
@@ -17,7 +15,7 @@ jobs:
           file: 'f303'
           token: ${{ secrets.GITHUB_TOKEN }}
   flash:
-    needs: checkout
+    needs: download
     uses: ./.github/workflows/flash.yml
     with:
       target: release
