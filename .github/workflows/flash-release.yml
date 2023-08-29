@@ -4,7 +4,7 @@ on:
   release:
     types: [published]
 jobs:
-  deploy-release:
+  checkout:
     runs-on: [ self-hosted, release ]
     steps:
       - name: Check out code
@@ -16,5 +16,8 @@ jobs:
           version: 'tags/${{ github.ref_name }}'
           file: 'f303'
           token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Flash target
-        run: gdb-multiarch -x gdb-st-link-flash-and-exit.py f303
+  flash:
+    needs: checkout
+    uses: ./.github/workflows/flash.yml
+    with:
+      target: release
