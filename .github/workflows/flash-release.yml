@@ -4,9 +4,11 @@ on:
   release:
     types: [published]
 jobs:
-  download:
+  flash-target:
     runs-on: [ self-hosted, release ]
     steps:
+      - name: Check out code
+        uses: actions/checkout@v3
       - name: Download target binary
         uses: dsaltares/fetch-gh-release-asset@master
         with:
@@ -14,8 +16,5 @@ jobs:
           version: 'tags/${{ github.ref_name }}'
           file: 'f303'
           token: ${{ secrets.GITHUB_TOKEN }}
-  flash:
-    needs: download
-    uses: ./.github/workflows/flash.yml
-    with:
-      target: release
+      - name: Flash target
+        run: gdb-multiarch -x gdb-st-link-flash-and-exit.py f303
