@@ -1,7 +1,7 @@
 # Load the serial number of the ST-Link to use from a file, if it exists.
 serial_command = ''
 try:
-    with open('../../st-link-serial.txt') as f:
+    with open('../../../st-link-serial.txt') as f:
         st_link_serial = f.read().strip()
         serial_command = '-c "adapter serial ' + st_link_serial + '"'
         print('Using ST-Link: ' + st_link_serial)
@@ -22,3 +22,5 @@ except Exception as e:
     print(e)
 finally:
     gdb.execute('quit')
+
+

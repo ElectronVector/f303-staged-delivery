@@ -11,4 +11,4 @@ jobs:
     needs: build
     uses: ./.github/workflows/flash.yml
     with:
-      target: dev
+      target: main
