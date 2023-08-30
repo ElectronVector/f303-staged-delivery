@@ -27,7 +27,7 @@ void clear_gpio_output(int selected_bit) {
 
 // Select the GPIOE pin used by the LED and the flash rate.
 #define LED 15
-#define LED_DELAY 400000
+#define LED_DELAY 1200000
 
 // Initialize and flash the LED.
 void main_app() {
