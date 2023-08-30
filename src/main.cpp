@@ -36,7 +36,7 @@ void main_app() {
 
     while (true) {
         delay(LED_DELAY);
-        //set_gpio_output(LED);
+        set_gpio_output(LED);
         delay(LED_DELAY);
         clear_gpio_output(LED);
     }
